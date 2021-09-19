@@ -25,6 +25,7 @@ public class Wage : MonoBehaviour
     [Header("Audio")]
     AudioSource source;
     public AudioClip drumroll;
+    public AudioClip win;
     public AudioClip aww;
 
 
@@ -230,7 +231,7 @@ public class Wage : MonoBehaviour
                             adjustedValue = 0.2f;
                         }
                         percentValues.Add(adjustedValue);
-                        Debug.Log("The total amount" + totalAmount);
+                       
                         
                         chestValue = adjustedValue * totalAmount;
                         chestValues.Add(chestValue);
@@ -274,13 +275,13 @@ public class Wage : MonoBehaviour
         {
             float ranNum = chestValues[Random.Range(0, chestValues.Count)];
             finishedChestValues.Add(ranNum);
-            //Debug.Log(ranNum);
+            
             chestValues.Remove(ranNum);
 
         }
         foreach (float f in finishedChestValues)
         {
-            Debug.Log("Value: " + f);
+           
         }
     }
 
@@ -296,8 +297,7 @@ public class Wage : MonoBehaviour
 
     void ChestResults()
     {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+       
         UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<Animator>().Play("TreasureOpen"); //chest opens and makes it no longer interactable until turn is over
         UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<Button>().interactable = false;
 
@@ -305,6 +305,8 @@ public class Wage : MonoBehaviour
         int rand = Random.Range(0, finishedChestValues.Count - 1);
         if (finishedChestValues[rand] == 0) //if the chest turns out to be the pooper, show the pooper text and end the playing round
         {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             source.PlayOneShot(aww, 0.6f);
             won.SetActive(false);
             pooper.SetActive(true);
@@ -333,11 +335,14 @@ public class Wage : MonoBehaviour
 
             return;
         }
+        source.PlayOneShot(win, 0.4f);
         //Add the total won amount to the last game win read out and remove the value from the chest.
         lastBalanceReadOut += finishedChestValues[rand];
         lastBalanceReadoutText.text = lastBalanceReadOut.ToString();
         wonAmount.text = finishedChestValues[rand].ToString();
         finishedChestValues.RemoveAt(rand);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
 }
