@@ -28,7 +28,7 @@ public class Wage : MonoBehaviour
     public AudioClip win;
     public AudioClip aww;
 
-
+    public static bool alreadyClicked = false;
 
     public float currentBalanceReadOut = 10f; //starting balance
 
@@ -289,26 +289,35 @@ public class Wage : MonoBehaviour
     void OpenChest() //Delay for sound effects in opening the chest
     {
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.visible = false;
+        won.SetActive(false);
         source.PlayOneShot(drumroll, 0.4f);
-        Invoke("ChestResults", 4f);
-    
+        if(!alreadyClicked)
+        {
+            alreadyClicked = true;
+            Debug.Log("Drumroll!");
+            Invoke("ChestResults", 4f);
+            UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<Animator>().Play("TreasureOpen"); //chest opens and makes it no longer interactable until turn is over
+            UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<Button>().interactable = false;
+
+        }
+
+
     }
 
     void ChestResults()
     {
        
-        UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<Animator>().Play("TreasureOpen"); //chest opens and makes it no longer interactable until turn is over
-        UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<Button>().interactable = false;
-
         won.SetActive(true);
         int rand = Random.Range(0, finishedChestValues.Count - 1);
         if (finishedChestValues[rand] == 0) //if the chest turns out to be the pooper, show the pooper text and end the playing round
         {
             Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            //Cursor.visible = true;
+            
             source.PlayOneShot(aww, 0.6f);
             won.SetActive(false);
+            alreadyClicked = false;
             pooper.SetActive(true);
             currentBalanceReadOut += lastBalanceReadOut;
             balanceReadout.text = currentBalanceReadOut.ToString();
@@ -339,10 +348,11 @@ public class Wage : MonoBehaviour
         //Add the total won amount to the last game win read out and remove the value from the chest.
         lastBalanceReadOut += finishedChestValues[rand];
         lastBalanceReadoutText.text = lastBalanceReadOut.ToString();
+        alreadyClicked = false;
         wonAmount.text = finishedChestValues[rand].ToString();
         finishedChestValues.RemoveAt(rand);
         Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+       // Cursor.visible = true;
     }
 
 }
