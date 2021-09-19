@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 5ff69844c5147934a93ab7caf588be61
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Casino Shadow
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 381b33c62ef1af24a9fd8df49687490e, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
