@@ -191,7 +191,7 @@ public class Wage : MonoBehaviour
 
         if (multiplier == 0) //just add zero if the multiplier is zero
         {
-            finishedChestValues.Add(0);
+            chestValues.Add(0);
         }
         else
         {
@@ -257,7 +257,7 @@ public class Wage : MonoBehaviour
 
         }
         percentValues.Clear(); //clear percent value list
-        GenerateRandomList();
+        //GenerateRandomList();
 
         for (int i = 0; i < chests.Count; i++)
         {
@@ -279,38 +279,34 @@ public class Wage : MonoBehaviour
             chestValues.Remove(ranNum);
 
         }
-        foreach (float f in finishedChestValues)
-        {
-           
-        }
+       
     }
 
 
-    void OpenChest() //Delay for sound effects in opening the chest
+    public void OpenChest() //Delay for sound effects in opening the chest
     {
         Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
         won.SetActive(false);
         source.PlayOneShot(drumroll, 0.4f);
-        if(!alreadyClicked)
+        if (!alreadyClicked)
         {
             alreadyClicked = true;
             Debug.Log("Drumroll!");
             Invoke("ChestResults", 4f);
             UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<Animator>().Play("TreasureOpen"); //chest opens and makes it no longer interactable until turn is over
             UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<Button>().interactable = false;
-
         }
 
 
     }
 
-    void ChestResults()
+    public void ChestResults()
     {
        
         won.SetActive(true);
-        int rand = Random.Range(0, finishedChestValues.Count - 1);
-        if (finishedChestValues[rand] == 0) //if the chest turns out to be the pooper, show the pooper text and end the playing round
+        int rand = Random.Range(0, chestValues.Count - 1);
+        if (chestValues[rand] == 0) //if the chest turns out to be the pooper, show the pooper text and end the playing round
         {
             Cursor.lockState = CursorLockMode.None;
             //Cursor.visible = true;
@@ -323,8 +319,8 @@ public class Wage : MonoBehaviour
             balanceReadout.text = currentBalanceReadOut.ToString();
             lastBalanceReadOut = 0;
             lastBalanceReadoutText.text = lastBalanceReadOut.ToString();
-            finishedChestValues.Clear();
             chestValues.Clear();
+           
             foreach (GameObject g in chests)
             {
                 g.GetComponent<Button>().interactable = false; //don't make them interactable unless play button is clicked again
@@ -346,11 +342,11 @@ public class Wage : MonoBehaviour
         }
         source.PlayOneShot(win, 0.4f);
         //Add the total won amount to the last game win read out and remove the value from the chest.
-        lastBalanceReadOut += finishedChestValues[rand];
+        lastBalanceReadOut += chestValues[rand];
         lastBalanceReadoutText.text = lastBalanceReadOut.ToString();
         alreadyClicked = false;
-        wonAmount.text = finishedChestValues[rand].ToString();
-        finishedChestValues.RemoveAt(rand);
+        wonAmount.text = chestValues[rand].ToString();
+        chestValues.RemoveAt(rand);
         Cursor.lockState = CursorLockMode.None;
        // Cursor.visible = true;
     }
